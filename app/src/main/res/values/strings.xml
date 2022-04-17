@@ -3,4 +3,7 @@
 
     <string name="app_name">Playground</string>
 
+    <string name="cd_menu_nav_button">Menu</string>
+    <string name="nav_destination_lobby">Lobby</string>
+
 </resources>
