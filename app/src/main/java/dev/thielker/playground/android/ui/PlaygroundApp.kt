@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraphBuilder
@@ -37,6 +38,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dev.thielker.playground.android.R
+import dev.thielker.playground.android.ui.lobby.ConnectionScreen
+import dev.thielker.playground.android.ui.lobby.ConnectionViewModel
+import dev.thielker.playground.android.ui.lobby.LobbyScreen
 import dev.thielker.playground.android.util.Destination
 import dev.thielker.playground.android.util.InsetsScaffold
 import kotlinx.coroutines.launch
@@ -122,7 +126,20 @@ private fun NavGraphBuilder.DashboardNavGraph(
 
     composable(route = destinations[0].route) {
 
-        updateTitle(destinations[0].name)
+        val viewModel: ConnectionViewModel = viewModel()
+
+        if (viewModel.isHosting) {
+
+            updateTitle(viewModel.mServiceName)
+
+            LobbyScreen(viewModel)
+
+        } else {
+
+            updateTitle(destinations[0].name)
+
+            ConnectionScreen(viewModel)
+        }
     }
 }
 

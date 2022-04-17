@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Playground</string>
+    <string name="app_name" translatable="false">Playground</string>
 
+    <!-- often used -->
+    <string name="string_cancel">Cancel</string>
+
+    <!-- navigation -->
     <string name="cd_menu_nav_button">Menu</string>
     <string name="nav_destination_lobby">Lobby</string>
+
+    <!-- connection screen -->
+    <string name="connection_create">Create Lobby</string>
+    <string name="connection_available_lobbies">Available lobbies</string>
+    <string name="connection_searching_lobbies">Searching for active lobbies in your network…</string>
+    <string name="connection_dialog_text">Create your own lobby. Everybody in your WIFI network will be able to join!</string>
+    <string name="connection_dialog_label_lobby">Lobby name</string>
+
+    <!-- lobby screen -->
+    <string name="lobby_close">Close Lobby</string>
+    <string name="lobby_joined_clients">Joined clients</string>
+    <string name="lobby_waiting_clients">Waiting for clients to join…</string>
+    <string name="lobby_dialog_text">Are you sure you want to close your current lobby? All clients will be disconnected!</string>
 
 </resources>
