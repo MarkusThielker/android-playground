@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- often used -->
+    <string name="string_cancel">Abbrechen</string>
+
+    <!-- navigation -->
+    <string name="cd_menu_nav_button">Menü</string>
+    <string name="nav_destination_lobby">Lobby</string>
+
+    <!-- connection screen -->
+    <string name="connection_create">Lobby erstellen</string>
+    <string name="connection_available_lobbies">Verfügbare Lobbies</string>
+    <string name="connection_searching_lobbies">Suche nach aktiven Lobbies in deinem Netzwerk…</string>
+    <string name="connection_dialog_text">Erstelle deine eigene Lobby. Alle in deinem Netzwerk können beitreten!</string>
+    <string name="connection_dialog_label_lobby">Lobby Name</string>
+
+    <!-- lobby screen -->
+    <string name="lobby_close">Lobby schließen</string>
+    <string name="lobby_joined_clients">Beigetretene Clients</string>
+    <string name="lobby_waiting_clients">Warte auf den Beitritt weiterer Clients…</string>
+    <string name="lobby_dialog_text">Bist du sicher, dass du die Lobby schließen möchtest? Alle Clients werden entfernt!</string>
+
+</resources>
