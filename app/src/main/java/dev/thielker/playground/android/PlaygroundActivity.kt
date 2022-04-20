@@ -25,6 +25,7 @@ class PlaygroundActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // set to false so that the modal navigation drawer overlaps status and navigation bar
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {

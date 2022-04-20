@@ -31,6 +31,18 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 
+/**
+ * This Composable extends the material3 Scaffold, by adding topBar and bottomBar height
+ * as padding. This limits the content area to the space between the two bars.
+ *
+ * This is especially useful if the activity's DecorFitsSystemWindows flag was set to false
+ * to make the navigation drawer overlap the systems status- and navigation-bar.
+ *
+ * Requires: androidx.compose.foundation:foundation:1.2.0 (alpha) and above
+ *
+ * @author Markus Thielker
+ *
+ * */
 @ExperimentalMaterial3Api
 @Composable
 fun InsetsScaffold(
@@ -56,6 +68,7 @@ fun InsetsScaffold(
             Column(
                 modifier = Modifier.onGloballyPositioned { topBarHeight = it.size.height }
             ) {
+                // places the topBar below the status bar
                 StatusBarInset(statusBarColor)
                 topBar()
             }
@@ -64,6 +77,7 @@ fun InsetsScaffold(
             Column(
                 modifier = Modifier.onGloballyPositioned { bottomBarHeight = it.size.height }
             ) {
+                // places the bottomBar above the navigation bar
                 bottomBar()
                 NavigationBarInset(navigationBarColor)
             }
@@ -73,6 +87,8 @@ fun InsetsScaffold(
         floatingActionButtonPosition = floatingActionButtonPosition,
         contentColor = contentColor,
         content = {
+            // limit content area between top bar and bottom bar
+            // necessary because DecorFitsSystemWindows is set to false
             Box(
                 modifier = Modifier
                     .fillMaxSize()
