@@ -1,3 +1,5 @@
+@file:Suppress("functionName")
+
 package dev.thielker.playground.android.ui.lobby
 
 import androidx.compose.foundation.layout.Arrangement
