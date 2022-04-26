@@ -1,5 +1,11 @@
 # Android Playground
 
+## Build the project
+
+Since the app is programmed using the Java JDK 16, this or a higher version must be installed and set as Gradle JDK. <br>
+To build the app, open the project in the latest Android Studio version and run the default run configuration.
+
+
 ## \[WIP] Lobby - Network service discovery (NSD)
 
 A simple lobby system implemented using Android's network service discovery. The client can search
