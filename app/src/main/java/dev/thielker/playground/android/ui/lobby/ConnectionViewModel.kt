@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
+import android.os.Build
 import android.provider.Settings
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -11,6 +12,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import io.ktor.http.ContentType
+import io.ktor.server.application.call
+import io.ktor.server.application.install
+import io.ktor.server.cio.CIO
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
+import io.ktor.server.websocket.WebSockets
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.net.ServerSocket
@@ -37,7 +49,7 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
 
     // current state
     var isHosting by mutableStateOf(false)
-    val services = mutableStateListOf<String>()
+    val services = mutableStateListOf<NsdServiceInfo>()
     val clients = mutableStateListOf<String>()
 
     // connection state listener
@@ -46,8 +58,9 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
         override fun onServiceRegistered(NsdServiceInfo: NsdServiceInfo) {
 
             isHosting = true
-            mServiceName =
-                NsdServiceInfo.serviceName // Update to react no changes by the system due to conflicts
+
+            // Update to react on changes by the system due to conflicts
+            mServiceName = NsdServiceInfo.serviceName
 
             Timber.d("Service registered as \"$mServiceName\"")
         }
@@ -89,8 +102,6 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
 
                 else -> {
 
-                    services.add(service.serviceName)
-
                     nsdManager.resolveService(
                         service,
                         resolveListener
@@ -100,7 +111,7 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
         }
 
         override fun onServiceLost(service: NsdServiceInfo) {
-            services.remove(service.serviceName)
+            services.removeIf { it.serviceName == service.serviceName }
             Timber.e("Service lost: $service")
         }
 
@@ -134,13 +145,20 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
                 return
             }
 
-            mService = serviceInfo
+            services.add(serviceInfo)
         }
     }
 
     init {
-        initializeServerSocket()
-        startDiscovery()
+
+        // setup running in main scope to avoid illegal
+        // state exception in initialization
+        CoroutineScope(Dispatchers.Main).launch {
+
+            // setting up backend and discovery
+            initializeServerSocket()
+            startDiscovery()
+        }
     }
 
     /** Initialize a server socket on the next available port. */
@@ -191,5 +209,12 @@ class ConnectionViewModel(application: Application) : AndroidViewModel(applicati
     /** Stop discovery for service with apps service type */
     private fun stopDiscovery() = viewModelScope.launch {
         nsdManager.stopServiceDiscovery(discoveryListener)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        nsdManager.stopServiceDiscovery(discoveryListener)
+        nsdManager.unregisterService(registrationListener)
     }
 }

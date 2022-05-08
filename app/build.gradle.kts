@@ -1,4 +1,3 @@
-val accompanistVersion: String by project
 val composeVersion: String by project
 val lifecycleVersion: String by project
 

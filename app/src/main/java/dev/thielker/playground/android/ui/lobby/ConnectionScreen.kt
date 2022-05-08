@@ -32,12 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.thielker.playground.android.R
@@ -74,7 +70,7 @@ fun ConnectionScreen(viewModel: ConnectionViewModel = viewModel()) {
             }
         }
 
-        items(viewModel.services) {
+        items(viewModel.services) { service ->
 
             Card(
                 modifier = Modifier
@@ -82,11 +78,22 @@ fun ConnectionScreen(viewModel: ConnectionViewModel = viewModel()) {
                     .fillMaxWidth(),
             ) {
 
-                Text(
-                    text = it,
+                Column(
                     modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.headlineSmall,
-                )
+                ) {
+
+                    Text(
+                        text = service.serviceName,
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "${service.host}:${service.port}",
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
             }
         }
 
@@ -118,10 +125,6 @@ fun ConnectionScreen(viewModel: ConnectionViewModel = viewModel()) {
 
                 val requester = remember { FocusRequester() }
 
-                val direction = LocalLayoutDirection.current
-                val selection = if (direction == LayoutDirection.Ltr)
-                    TextRange(viewModel.mServiceName.length) else TextRange.Zero
-
                 Column {
 
                     Text(text = stringResource(id = R.string.connection_dialog_text))
@@ -129,11 +132,8 @@ fun ConnectionScreen(viewModel: ConnectionViewModel = viewModel()) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     TextField(
-                        value = TextFieldValue(
-                            text = viewModel.mServiceName,
-                            selection = selection
-                        ),
-                        onValueChange = { viewModel.mServiceName = it.text },
+                        value = viewModel.mServiceName,
+                        onValueChange = { viewModel.mServiceName = it },
                         label = { Text(text = stringResource(id = R.string.connection_dialog_label_lobby)) },
                         modifier = Modifier.focusRequester(requester),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
