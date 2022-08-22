@@ -16,6 +16,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
@@ -155,28 +156,31 @@ private fun DrawerContent(
 
     val insets = WindowInsets.statusBars.union(WindowInsets(top = 10.dp))
 
-    Column(
-        modifier = modifier
-            .padding(12.dp)
-            .windowInsetsPadding(insets),
-    ) {
+    ModalDrawerSheet {
 
-        destinations.forEach { destination ->
+        Column(
+            modifier = modifier
+                .padding(12.dp)
+                .windowInsetsPadding(insets),
+        ) {
 
-            NavigationDrawerItem(
-                icon = {
-                    Icon(
-                        imageVector = destination.icon,
-                        contentDescription = destination.name,
-                    )
-                },
-                label = { Text(text = destination.name) },
-                selected = currentDestination?.route == destination.route,
-                onClick = {
-                    navController.navigate(route = destination.route)
-                    closeDrawer()
-                },
-            )
+            destinations.forEach { destination ->
+
+                NavigationDrawerItem(
+                    icon = {
+                        Icon(
+                            imageVector = destination.icon,
+                            contentDescription = destination.name,
+                        )
+                    },
+                    label = { Text(text = destination.name) },
+                    selected = currentDestination?.route == destination.route,
+                    onClick = {
+                        navController.navigate(route = destination.route)
+                        closeDrawer()
+                    },
+                )
+            }
         }
     }
 }
